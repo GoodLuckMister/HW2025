@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 // Create Iterator for given dataset with Symbol.asyncIterator
 // Use for..of to iterate it and pass data to Basket
@@ -99,7 +99,7 @@ class Basket {
     const isOverLimit = this.total + item.price > this.#limit;
     if (isOverLimit) {
       this.errors.push(
-        `Exceeds limit with: ${item.name}, price: ${item.price}`
+        `Exceeds limit with: ${item.name}, price: ${item.price}`,
       );
     }
     return isOverLimit;

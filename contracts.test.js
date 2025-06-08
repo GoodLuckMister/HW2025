@@ -1,20 +1,20 @@
-"use strict";
+'use strict';
 
-const test = require("node:test");
-const assert = require("node:assert");
+const test = require('node:test');
+const assert = require('node:assert');
 
-const { PurchaseIterable, Basket } = require("./2-contracts.js");
+const { PurchaseIterable, Basket } = require('./contracts.js');
 
 const purchase = [
-  { name: "Laptop", price: 1500 },
-  { name: "Mouse", price: 25 },
-  { name: "Keyboard", price: 100 },
-  { name: "HDMI cable", price: 10 },
-  { name: "Bag", price: 50 },
-  { name: "Mouse pad", price: 5 },
+  { name: 'Laptop', price: 1500 },
+  { name: 'Mouse', price: 25 },
+  { name: 'Keyboard', price: 100 },
+  { name: 'HDMI cable', price: 10 },
+  { name: 'Bag', price: 50 },
+  { name: 'Mouse pad', price: 5 },
 ];
 
-test("Sync iterator basket.add items:", () => {
+test('Sync iterator basket.add items:', () => {
   const goods = PurchaseIterable.create(purchase);
   const basket = new Basket({ limit: 1050 });
 
@@ -28,7 +28,7 @@ test("Sync iterator basket.add items:", () => {
   });
 });
 
-test("Async iterator basket.add items:", async () => {
+test('Async iterator basket.add items:', async () => {
   const goods = PurchaseIterable.create(purchase);
   const basket = new Basket({ limit: 1050 });
 

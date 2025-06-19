@@ -75,14 +75,4 @@ class FileStorage extends Database {
   }
 }
 
-// Usage
-
-const main = async () => {
-  const db = new FileStorage('./storage.dat');
-  const cursor = db.select({ city: 'Roma' });
-  for await (const record of cursor) {
-    console.dir(record);
-  }
-};
-
-main();
+module.exports = { FileStorage, FileLineCursor };

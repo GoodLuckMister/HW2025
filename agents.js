@@ -3,7 +3,7 @@
 class Strategy {
   #name;
   #actions;
-  #behaviors = new Map();
+  #implementations = new Map();
   constructor(strategyName, actions) {
     this.#name = strategyName;
     this.#actions = actions;
@@ -23,11 +23,11 @@ class Strategy {
         throw new Error(`Key ${actionName} expected to be function`);
       }
     }
-    this.#behaviors.set(implementationName, behaviour);
+    this.#implementations.set(implementationName, behaviour);
   }
 
   getBehaviour(implementationName, actionName) {
-    const behaviour = this.#behaviors.get(implementationName);
+    const behaviour = this.#implementations.get(implementationName);
     if (!behaviour) {
       throw new Error(
         `Action ${implementationName} for strategy ${this.#name} is not found`,

@@ -13,11 +13,10 @@ class Strategy {
     if (typeof implementationName !== 'string') {
       throw new Error('Implementation name expected to be string');
     }
-    const behaviourKeys = Object.keys(behaviour);
-    for (const actionName of behaviourKeys) {
+    for (const actionName of Object.keys(behaviour)) {
       if (!this.#actions.includes(actionName)) {
         throw new Error(
-          `Action "${actionName}" is not allowed for strategy "${this.#name}"`,
+          `Action ${actionName} is not allowed for strategy ${this.#name}`,
         );
       }
       if (typeof behaviour[actionName] !== 'function') {
@@ -30,50 +29,18 @@ class Strategy {
   getBehaviour(implementationName, actionName) {
     const behaviour = this.#behaviors.get(implementationName);
     if (!behaviour) {
-      throw new Error(`Strategy "${this.#name}" is not found`);
+      throw new Error(
+        `Action ${implementationName} for strategy ${this.#name} is not found`,
+      );
     }
     const handler = behaviour[actionName];
     if (!handler) {
       throw new Error(
-        `Action "${actionName}" for strategy "${this.#name}" is not found`,
+        `Action ${actionName} for strategy ${this.#name} is not found`,
       );
     }
     return handler;
   }
 }
 
-const notification = new Strategy('notification', ['notify', 'multicast']);
-notification.registerBehaviour('email', {
-  notify: (to, message) => {
-    console.log(`Sending "email" notification to <${to}>`);
-    console.log(`message length: ${message.length}`);
-  },
-  multicast: (message) => {
-    console.log(`Sending "email" notification to all`);
-    console.log(`message length: ${message.length}`);
-  },
-});
-notification.registerBehaviour('sms', {
-  notify: (to, message) => {
-    console.log(`Sending "sms" notification to <${to}>`);
-    console.log(`message length: ${message.length}`);
-  },
-  multicast: (message) => {
-    console.log(`Sending "sms" notification to all`);
-    console.log(`message length: ${message.length}`);
-  },
-});
-
-notification.registerBehaviour('push', {
-  notifying: (to, message) => {
-    console.log(`Sending "push" notification to <${to}>`);
-    console.log(`message length: ${message.length}`);
-  },
-  multicasting: (message) => {
-    console.log(`Sending "push" notification to all`);
-    console.log(`message length: ${message.length}`);
-  },
-});
-
-const notify = notification.getBehaviour('sms', 'notify');
-notify('+380501234567', 'Hello world');
+module.exports = { Strategy };

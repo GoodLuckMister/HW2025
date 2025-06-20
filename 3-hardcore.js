@@ -6,11 +6,11 @@
 
 class Timer extends EventTarget {
   #counter = 0;
-  constructor(delay, eventname = 'step') {
+  constructor({ name = 'step', delay = 1000 } = {}) {
     super();
     setInterval(() => {
-      const data = { detail: { [eventname]: this.#counter++ } };
-      const event = new CustomEvent(eventname, data);
+      const data = { detail: { [name]: this.#counter++ } };
+      const event = new CustomEvent(name, data);
       this.dispatchEvent(event);
     }, delay);
   }
@@ -18,7 +18,7 @@ class Timer extends EventTarget {
 
 // Usage
 
-const timer = new Timer(1000, 'tick');
+const timer = new Timer({ name: 'tick', delay: 500 });
 
 timer.addEventListener('tick', (event) => {
   console.log({ event, detail: event.detail });

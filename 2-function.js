@@ -4,6 +4,21 @@ const timeoutCollection = (interval) => {
   const collection = new Map();
   const expirations = new Map();
 
+  const clear = setInterval(() => {
+    const entries = expirations.entries();
+    if (!entries.length) {
+      clearInterval(clear);
+      return;
+    }
+    const now = Date.now();
+    for (const [key, expires] of entries) {
+      if (now >= expires) {
+        collection.delete(key);
+        expirations.delete(key);
+      }
+    }
+  }, interval);
+
   const set = (key, value) => {
     const expires = Date.now() + interval;
     collection.set(key, value);

@@ -1,70 +1,34 @@
 'use strict';
 
 const { EventEmitter } = require('node:events');
+const { Logger } = require('./logger');
 
-const COLORS = {
-  warn: '\x1b[1;33m',
-  error: '\x1b[0;31m',
-  info: '\x1b[1;37m',
-};
-
-class Logger {
-  constructor(instance) {
-    this.instance = instance ?? console;
-  }
-
-  static create(instance) {
-    return new Logger(instance);
-  }
-
-  log(level, s) {
-    const date = new Date().toISOString();
-    const color = COLORS[level] ?? COLORS.info;
-    this.instance.log(color + date + '\t' + s + '\x1b[0m');
-  }
-
-  warn(s) {
-    this.log('warn', s);
-  }
-
-  error(s) {
-    this.log('error', s);
-  }
-
-  info(s) {
-    this.log('info', s);
-  }
-}
-
-const timeStrategy = (time) => {
-  const typeTime = typeof time;
-  const strategies = {
-    number: {
-      time: Date.now() + time,
-      set: setInterval,
-      clear: clearInterval,
-    },
-    string: {
-      time: new Date(time).getTime(),
-      set: setTimeout,
-      clear: clearTimeout,
-    },
-  };
-  return strategies[typeTime] ?? strategies.string;
+const timerStrategy = {
+  number: {
+    getTime: (time) => Date.now() + time,
+    set: setTimeout,
+    clear: clearTimeout,
+  },
+  string: {
+    getTime: (time) => new Date(time).getTime(),
+    set: setTimeout,
+    clear: clearTimeout,
+  },
 };
 
 class Task extends EventEmitter {
   constructor(name, time, exec) {
     super();
     this.name = name;
-    const timerMethods = timeStrategy(time);
-    this.time = timerMethods.time;
-    this.set = timerMethods.set;
-    this.clear = timerMethods.clear;
     this.exec = exec;
     this.running = false;
     this.count = 0;
     this.timer = null;
+    const { getTime, set, clear } =
+      timerStrategy[typeof time] || timerStrategy.string;
+    this.time = getTime(time);
+    this.set = set;
+    this.clear = clear;
   }
 
   get active() {
